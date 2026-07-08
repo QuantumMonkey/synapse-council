@@ -135,6 +135,8 @@
   </div>
 
   <script>
+    const isTauri = window.__TAURI__ !== undefined;
+
     // Logic for saving keys
     document.getElementById('btn-unlock').addEventListener('click', async () => {
       const keys = {
@@ -147,31 +149,45 @@
       const btn = document.getElementById('btn-unlock');
       btn.innerText = 'Encrypting...';
 
-      // Mock Tauri IPC call to secure storage
-      // In Tauri: await window.__TAURI__.invoke('store_keys', { keys });
-      setTimeout(() => {
-        // Mark as encrypted in UI (mocking)
-        Object.keys(keys).forEach(k => {
-          if (keys[k]) {
-            document.getElementById(`status-${k}`).style.display = 'inline';
-            localStorage.setItem(`MOCK_ENC_KEY_${k}`, keys[k]); // strictly for mocking until Tauri is built
+      for (const k of Object.keys(keys)) {
+        if (keys[k]) {
+          if (isTauri) {
+             await window.__TAURI__.invoke('store_key', { service: k, key: keys[k] });
+          } else {
+             localStorage.setItem(`MOCK_ENC_KEY_${k}`, keys[k]);
           }
-        });
-        
+          document.getElementById(`status-${k}`).style.display = 'inline';
+        }
+      }
+      
+      setTimeout(() => {
         btn.innerText = 'Enter Arena';
         btn.onclick = () => { window.location.href = 'index.html'; };
-      }, 800);
+      }, 500);
     });
 
-    // On load, mock load if exists
-    window.addEventListener('DOMContentLoaded', () => {
+    // On load, load keys from secure storage
+    window.addEventListener('DOMContentLoaded', async () => {
       const keys = ['gemini1', 'gemini2', 'groq', 'openrouter'];
-      keys.forEach(k => {
-        if (localStorage.getItem(`MOCK_ENC_KEY_${k}`)) {
-           document.getElementById(`key-${k}`).value = '********'; // hide real key in UI
-           document.getElementById(`status-${k}`).style.display = 'inline';
+      
+      for (const k of keys) {
+        try {
+          let hasKey = false;
+          if (isTauri) {
+             const val = await window.__TAURI__.invoke('get_key', { service: k });
+             hasKey = !!val;
+          } else {
+             hasKey = !!localStorage.getItem(`MOCK_ENC_KEY_${k}`);
+          }
+          
+          if (hasKey) {
+             document.getElementById(`key-${k}`).value = '********'; 
+             document.getElementById(`status-${k}`).style.display = 'inline';
+          }
+        } catch (e) {
+          // Key doesn't exist yet
         }
-      });
+      }
     });
   </script>
 </body>
