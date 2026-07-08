@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synapse Council — Multi-Agent Intelligence Arena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-glow"></div>
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        <h1>SYNAPSE <span>COUNCIL</span></h1>
+      </div>
+      
+      <div class="action-buttons">
+        <a href="gateway.html" class="outline-btn size-sm">Security Gateway</a>
+      </div>
+    </header>
+
+    <!-- MAIN BODY -->
+    <main class="app-body">
+      
+      <!-- SIDEBAR: Configuration -->
+      <aside class="sidebar">
+        
+        <!-- API KEYS ACCORDION -->
+        <section class="panel glass-panel collapsible" id="api-keys-panel">
+          <div class="panel-header">
+            <h3>API Keys Configuration</h3>
+            <button class="icon-btn toggle-panel-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+          </div>
+          <div class="panel-content">
+            <p class="panel-tip">Keys entered here are saved locally in your browser and override `.env` values.</p>
+            <div class="input-group">
+              <label for="key-gemini-personal">Gemini Key (Personal)</label>
+              <input type="password" id="key-gemini-personal" placeholder="Enter Gemini Personal API Key">
+            </div>
+            <div class="input-group">
+              <label for="key-gemini-work">Gemini Key (Work)</label>
+              <input type="password" id="key-gemini-work" placeholder="Enter Gemini Work API Key">
+            </div>
+            <div class="input-group">
+              <label for="key-gemini-moderator">Gemini Key (Moderator)</label>
+              <input type="password" id="key-gemini-moderator" placeholder="Enter Gemini Moderator API Key">
+            </div>
+            <div class="input-group">
+              <label for="key-groq">Groq API Key</label>
+              <input type="password" id="key-groq" placeholder="Enter Groq API Key">
+            </div>
+            <div class="input-group">
+              <label for="key-openrouter">OpenRouter API Key</label>
+              <input type="password" id="key-openrouter" placeholder="Enter OpenRouter API Key">
+            </div>
+            <div class="input-group">
+              <label for="key-cohere">Cohere API Key</label>
+              <input type="password" id="key-cohere" placeholder="Enter Cohere API Key">
+            </div>
+            <div class="input-group">
+              <label for="key-deepseek">DeepSeek API Key</label>
+              <input type="password" id="key-deepseek" placeholder="Enter DeepSeek API Key">
+            </div>
+            <div class="input-group">
+              <label for="key-qwen">Qwen (DashScope) API Key</label>
+              <input type="password" id="key-qwen" placeholder="Enter Qwen API Key">
+            </div>
+            <button id="save-keys-btn" class="primary-btn size-sm">Apply Local Keys</button>
+          </div>
+        </section>
+
+        <!-- AGENT CREATOR -->
+        <section class="panel glass-panel">
+          <div class="panel-header">
+            <h3>Agent Configurator</h3>
+          </div>
+          <div class="panel-content">
+            <form id="agent-creator-form">
+              <div class="input-group">
+                <label for="agent-name">Agent Name</label>
+                <input type="text" id="agent-name" placeholder="e.g., The Socrates" required>
+              </div>
+              
+              <div class="row">
+                <div class="input-group col">
+                  <label for="agent-provider">Provider</label>
+                  <select id="agent-provider">
+                    <option value="gemini_personal">Gemini (Personal)</option>
+                    <option value="gemini_work">Gemini (Work)</option>
+                    <option value="groq">Groq</option>
+                    <option value="openrouter" selected>OpenRouter</option>
+                    <option value="cohere">Cohere</option>
+                    <option value="deepseek">DeepSeek</option>
+                    <option value="qwen">Qwen (DashScope)</option>
+                  </select>
+                </div>
+                
+                <div class="input-group col">
+                  <label for="agent-model">Model</label>
+                  <select id="agent-model">
+                    <!-- Populated dynamically via JS -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="input-group col">
+                  <label for="agent-color">Theme Color</label>
+                  <div class="color-picker-wrapper">
+                    <input type="color" id="agent-color" value="#00ffcc">
+                  </div>
+                </div>
+                <div class="input-group col">
+                  <label for="agent-avatar">Avatar Symbol</label>
+                  <select id="agent-avatar">
+                    <option value="🧠">🧠 Brain</option>
+                    <option value="⚖️">⚖️ Scale</option>
+                    <option value="🖋️">🖋️ Pen</option>
+                    <option value="👁️">👁️ Eye</option>
+                    <option value="🛡️">🛡️ Shield</option>
+                    <option value="🧪">🧪 Flask</option>
+                    <option value="🎭">🎭 Mask</option>
+                    <option value="🔥">🔥 Fire</option>
+                    <option value="⚡">⚡ Lightning</option>
+                    <option value="🪐">🪐 Planet</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="agent-system">System Instructions / Personality</label>
+                <textarea id="agent-system" rows="4" placeholder="Describe the personality, reasoning style, or perspective of this agent..." required></textarea>
+              </div>
+
+              <div class="input-group">
+                <label for="agent-temp">Temperature: <span id="agent-temp-val">0.7</span></label>
+                <input type="range" id="agent-temp" min="0" max="1.5" step="0.1" value="0.7">
+              </div>
+
+              <button type="submit" class="secondary-btn w-100">Create / Update Agent</button>
+            </form>
+          </div>
+        </section>
+
+        <!-- ACTIVE COUNCIL LIST -->
+        <section class="panel glass-panel flex-grow-1 flex-column" style="min-height: 220px;">
+          <div class="panel-header">
+            <h3>Active Council Members</h3>
+            <span class="count-tag" id="council-count">0</span>
+          </div>
+          <div class="panel-content flex-grow-1 overflow-y-auto" id="council-list">
+            <!-- Council items populated via JS -->
+            <div class="empty-state">No agents created yet. Add agents above to seat them in the Council.</div>
+          </div>
+        </section>
+
+        <!-- SESSION STATS DASHBOARD -->
+        <section class="panel glass-panel" id="stats-panel">
+          <div class="panel-header">
+            <h3>Session Stats</h3>
+          </div>
+          <div class="panel-content">
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-label">Prompt Tokens</span>
+                <span class="stat-value" id="stats-prompt">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Response Tokens</span>
+                <span class="stat-value" id="stats-completion">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Total Tokens</span>
+                <span class="stat-value highlight" id="stats-total">0</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Turns Run</span>
+                <span class="stat-value" id="stats-turns">0</span>
+              </div>
+            </div>
+            <div class="cooldowns-container" id="cooldowns-list" style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+              <!-- Dynamic rate-limit countdown banners will render here -->
+            </div>
+          </div>
+        </section>
+
+      </aside>
+
+      <!-- CHAT ARENA -->
+      <section class="chat-arena">
+        
+        <!-- ARENA CONTROLS -->
+        <div class="arena-controls glass-panel">
+          <div class="topic-row">
+            <div class="input-group flex-grow-1">
+              <label for="debate-topic">Discussion Topic / Starting Prompt</label>
+              <input type="text" id="debate-topic" placeholder="e.g., Does superintelligence necessitate moral awareness? Or enter a prompt to discuss...">
+            </div>
+            
+            <div class="control-group" style="width: 140px;">
+              <label for="history-limit">Token Saver (Context)</label>
+              <select id="history-limit" class="select-sm">
+                <option value="999" selected>Full History</option>
+                <option value="5">Last 5 Messages</option>
+                <option value="10">Last 10 Messages</option>
+                <option value="15">Last 15 Messages</option>
+              </select>
+            </div>
+
+            <div class="control-group" style="width: 90px;">
+              <label for="autonomous-turns">Turns</label>
+              <select id="autonomous-turns" class="select-sm">
+                <option value="3">3 Turns</option>
+                <option value="5" selected>5 Turns</option>
+                <option value="10">10 Turns</option>
+                <option value="15">15 Turns</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="buttons-row">
+            <div class="action-buttons">
+              <button id="start-discussion-btn" class="primary-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>Initiate Council</span>
+              </button>
+              
+              <button id="step-btn" class="outline-btn" title="Run only the next turn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <polygon points="5 4 15 12 5 20 5 4"/>
+                  <line x1="19" y1="5" x2="19" y2="19"/>
+                </svg>
+                <span>Step Turn</span>
+              </button>
+
+              <button id="pause-btn" class="outline-btn hidden">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <rect x="6" y="4" width="4" height="16"/>
+                  <rect x="14" y="4" width="4" height="16"/>
+                </svg>
+                <span>Pause</span>
+              </button>
+
+              <button id="export-obsidian-btn" class="outline-btn" style="border-color: var(--accent-purple); color: var(--accent-purple); display: none;" title="Save to Obsidian Vault">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span>Export to Obsidian</span>
+              </button>
+            </div>
+
+            <div class="arena-settings" style="gap: 12px;">
+              <label class="switch-container" title="Summon Moderator to analyze drift and steer conversation">
+                <input type="checkbox" id="moderator-toggle">
+                <span class="switch-slider"></span>
+                <span class="switch-label">Moderator</span>
+              </label>
+
+              <select id="moderator-interval" class="select-sm" style="padding: 4px 6px; font-size: 0.75rem; width: 110px;" title="Moderator intervention frequency">
+                <option value="3">Every 3 turns</option>
+                <option value="5" selected>Every 5 turns</option>
+              </select>
+
+              <label class="switch-container">
+                <input type="checkbox" id="autonomous-toggle" checked>
+                <span class="switch-slider"></span>
+                <span class="switch-label">Autonomous</span>
+              </label>
+              
+              <button id="clear-arena-btn" class="danger-btn size-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                <span>Clear Arena</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRANSCRIPT WINDOW -->
+        <div class="transcript-window glass-panel" id="chat-stream">
+          <!-- Messages will stream here -->
+          <div class="welcome-screen">
+            <h2>Welcome to the Synapse Council</h2>
+            <p>A playground to facilitate dialogue between different forms of artificial intelligence. Seat multiple LLMs at the table, define their individual perspectives, and watch them collaborate, argue, or analyze any topic.</p>
+            <div class="setup-steps">
+              <div class="step-card">
+                <div class="step-num">1</div>
+                <h4>Provide API Keys</h4>
+                <p>Add key values in your local `.env` or paste them in the sidebar configuration drawer.</p>
+              </div>
+              <div class="step-card">
+                <div class="step-num">2</div>
+                <h4>Configure Agents</h4>
+                <p>Create agents representing different personas and models, and add them to the Council.</p>
+              </div>
+              <div class="step-card">
+                <div class="step-num">3</div>
+                <h4>Start the Debate</h4>
+                <p>Type a topic or question, configure autonomous turns, and click <strong>Initiate Council</strong>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- USER INPUT PANEL -->
+        <div class="user-input-panel glass-panel">
+          <textarea id="user-message-input" rows="2" placeholder="Inject your thoughts into the discussion, or ask a question to the council..."></textarea>
+          <div class="input-actions">
+            <span class="input-tip">Press Shift+Enter for new line</span>
+            <div class="send-selectors">
+              <label for="target-agent-select" class="sr-only">Target Agent</label>
+              <select id="target-agent-select" class="select-sm">
+                <option value="all">Address Entire Council</option>
+                <!-- Filled dynamically with agent list -->
+              </select>
+              <button id="send-user-btn" class="primary-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <line x1="22" y1="2" x2="11" y2="13"/>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+                <span>Send</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- KNOWLEDGE BANK / VAULT PANEL -->
+      <div id="vault-panel" class="vault-panel hidden" style="flex: 1; display: flex; gap: 12px; height: 100%; overflow: hidden;">
+        
+        <!-- Vault File List sidebar -->
+        <aside class="vault-sidebar panel glass-panel" style="width: 340px; height: 100%; flex-shrink: 0; display: flex; flex-direction: column;">
+          <div class="panel-header">
+            <h3>Exported Debates</h3>
+            <button id="refresh-vault-btn" class="icon-btn" title="Refresh Vault List">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                <path d="M23 4v6h-6M1 20v-6h6M21.02 7a10 10 0 0 0-14.83-2.15l-5.67 5.67M2.98 17a10 10 0 0 0 14.83 2.15l5.67-5.67"/>
+              </svg>
+            </button>
+          </div>
+          <div class="panel-content overflow-y-auto" id="vault-file-list" style="flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+            <!-- Populate list of files dynamically -->
+          </div>
+        </aside>
+
+        <!-- Vault Reading Room container -->
+        <section class="vault-viewer panel glass-panel flex-grow-1 flex-column" style="height: 100%; display: flex; flex-direction: column; overflow: hidden;">
+          <div class="panel-header" style="justify-content: space-between; align-items: center; display: flex;">
+            <h3 id="vault-doc-title">Knowledge Bank Reading Room</h3>
+            <div id="vault-doc-meta" style="font-size: 0.75rem; color: var(--text-muted); display: none;"></div>
+          </div>
+          <div class="panel-content overflow-y-auto" id="vault-doc-content" style="flex: 1; padding: 24px 32px; line-height: 1.7; font-size: 0.95rem; font-family: var(--font-main);">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-muted); text-align: center;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48" style="margin-bottom: 16px; opacity: 0.5; color: var(--accent-purple);">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              <h4>Select a Debate Record</h4>
+              <p style="font-size: 0.8rem; max-width: 320px; margin-top: 6px; color: var(--text-muted);">Transcripts exported to Obsidian will appear on the left. Click on any record to view its scorecards, semantic digests, and logs.</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>
