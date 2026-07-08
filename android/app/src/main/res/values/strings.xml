@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">synapse-council</string>
+    <string name="title_activity_main">synapse-council</string>
+    <string name="package_name">com.quantummonkey.synapsecouncil</string>
+    <string name="custom_url_scheme">com.quantummonkey.synapsecouncil</string>
+</resources>
