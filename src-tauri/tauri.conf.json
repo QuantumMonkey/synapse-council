@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "synapse-council",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.quantummonkey.synapsecouncil",
   "build": {
     "frontendDist": "../public",
     "devUrl": "http://localhost:3000",
