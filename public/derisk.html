@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>De-risk CORS Test</title>
+  <style>
+    body { font-family: monospace; background: #111; color: #0f0; padding: 20px; }
+    input { width: 100%; padding: 10px; margin: 5px 0 20px 0; background: #222; color: #fff; border: 1px solid #444; }
+    button { padding: 10px 20px; background: #444; color: #fff; border: none; cursor: pointer; margin-right: 10px; }
+    button:hover { background: #666; }
+    pre { background: #000; padding: 15px; border: 1px solid #333; height: 300px; overflow-y: scroll; white-space: pre-wrap; word-wrap: break-word; }
+  </style>
+</head>
+<body>
+
+  <h2>API CORS De-risking Harness</h2>
+  <p>Tests native fetch via CapacitorHttp. If you see CORS errors here, the patch failed.</p>
+
+  <label>Gemini API Key</label>
+  <input type="password" id="key-gemini" placeholder="AIzaSy...">
+  <button onclick="testAPI('gemini')">Ping Gemini</button>
+
+  <label>Groq API Key</label>
+  <input type="password" id="key-groq" placeholder="gsk_...">
+  <button onclick="testAPI('groq')">Ping Groq</button>
+
+  <label>OpenRouter API Key</label>
+  <input type="password" id="key-openrouter" placeholder="sk-or-v1-...">
+  <button onclick="testAPI('openrouter')">Ping OpenRouter</button>
+  
+  <br><br>
+  <button onclick="window.location.href='gateway.html'" style="background:#800">Back to Gateway</button>
+
+  <h3>Log Output</h3>
+  <pre id="log"></pre>
+
+  <script>
+    const logEl = document.getElementById('log');
+    function log(msg) {
+      logEl.innerText += msg + '\n\n';
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    async function testAPI(provider) {
+      const key = document.getElementById(`key-${provider}`).value.trim();
+      if (!key) {
+        log(`[${provider}] Error: Key is empty.`);
+        return;
+      }
+
+      log(`[${provider}] Initiating fetch...`);
+      
+      let url = '';
+      let headers = { 'Content-Type': 'application/json' };
+      let body = {};
+
+      try {
+        if (provider === 'gemini') {
+          url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+          body = { contents: [{ parts: [{ text: "Hello" }] }] };
+        } else if (provider === 'groq') {
+          url = 'https://api.groq.com/openai/v1/chat/completions';
+          headers['Authorization'] = `Bearer ${key}`;
+          body = { model: 'llama3-8b-8192', messages: [{ role: 'user', content: 'Hello' }] };
+        } else if (provider === 'openrouter') {
+          url = 'https://openrouter.ai/api/v1/chat/completions';
+          headers['Authorization'] = `Bearer ${key}`;
+          body = { model: 'mistralai/mistral-7b-instruct:free', messages: [{ role: 'user', content: 'Hello' }] };
+        }
+
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(body)
+        });
+
+        const data = await response.text();
+        log(`[${provider}] HTTP ${response.status}\nResponse: ${data.substring(0, 300)}...`);
+      } catch (err) {
+        log(`[${provider}] CRITICAL ERROR (Likely CORS/Network):\n${err.message}\n${err.stack}`);
+      }
+    }
+  </script>
+</body>
+</html>
